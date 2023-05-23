@@ -1,4 +1,4 @@
-<h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="DuisheevArtur_0"></a>DuisheevArtur</h1>
+<h1 class="code-line" data-line-start=0 data-line-end=1 ><a id="DuisheevArtur_0"></a>Fatality company</h1>
 <h2 class="code-line" data-line-start=1 data-line-end=2 ><a id="this_is_the_backend_part_of_the_son_kyol_travel_project_1"></a>this is the backend part of the AlmaCar project</h2>
 <p class="has-line-data" data-line-start="3" data-line-end="4"><a href="https://www.djangoproject.com/"><img src="https://static.djangoproject.com/img/logos/django-logo-negative.1d528e2cb5fb.png" alt="N|Django"></a></p>
 <p class="has-line-data" data-line-start="5" data-line-end="6"><a href="https://travis-ci.org/joemccann/dillinger"><img src="https://travis-ci.org/joemccann/dillinger.svg?branch=master" alt="Build Status"></a></p>
