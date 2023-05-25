@@ -33,6 +33,7 @@ APPS = [
     'additional_service',
     'condition',
     'contact',
+    'personal_area'
 ]
 # Application definition
 
