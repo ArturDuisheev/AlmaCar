@@ -15,7 +15,7 @@ idna==3.4
 oauthlib==3.2.2
 Pillow==9.5.0
 protobuf==4.23.1
-psycopg2==2.9.6
+psycopg2-binary==2.9.6
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pyparsing==3.0.9
@@ -28,3 +28,4 @@ sqlparse==0.4.4
 tzdata==2023.3
 uritemplate==4.1.1
 urllib3==1.26.15
+shortuuid

@@ -34,7 +34,6 @@ APPS = [
     'additional_service',
     'condition',
     'contact',
-    'personal_area'
 ]
 # Application definition
 
@@ -92,7 +91,11 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
+# import firebase_admin
+# from firebase_admin import credentials
+#
+# cred = credentials.Certificate('cert.json')
+# firebase_admin.initialize_app(cred)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -129,14 +132,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    # Путь к папке со статическими файлами вашего проекта
-    os.path.join(BASE_DIR, 'static'),
-]
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+
+AUTH_USER_MODEL = 'account.User'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
