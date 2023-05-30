@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, Comment, PromoCode
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -16,7 +17,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=20, write_only=True)
     password_2 = serializers.CharField(max_length=20, write_only=True)
     sms_code = serializers.CharField(max_length=20, write_only=True)
-    promo_code = serializers.CharField(max_length=20, required=False)
+    promo_code = serializers.CharField(max_length=20, required=False, allow_null=True)
 
     class Meta:
         model = User
@@ -40,6 +41,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
                     promotion=True)
                 user.set_password(validated_data['password'])
                 user.save()
+                return user
             else:
                 user = User(
                     username=validated_data['username'],
@@ -60,3 +62,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return str(obj.user.username)
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['phone_number'] = user.phone_number
+
+        return token
