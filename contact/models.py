@@ -7,6 +7,7 @@ class Contact(models.Model):
     email = models.EmailField(verbose_name="Почта")
     hour_working = models.CharField(max_length=200, verbose_name="Время работы")
     city = models.CharField(max_length=250, verbose_name="Город")
+    map = models.CharField(max_length=250, blank=True, null=True, verbose_name="местоположение на карте")
 
     def __str__(self):
         return self.phone_number_first
