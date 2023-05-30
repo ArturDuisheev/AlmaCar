@@ -18,7 +18,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     inn = serializers.CharField(max_length=20)
     password = serializers.CharField(max_length=20, write_only=True)
     password_2 = serializers.CharField(max_length=20, write_only=True)
-    sms_code = serializers.CharField(max_length=20, write_only=True)
     promo_code = serializers.CharField(max_length=20, required=False, allow_null=True)
 
     class Meta:
