@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 APPS = [
     'main_page',
     'account',
+    'draw',
     'additional_service',
     'condition',
     'contact',
@@ -83,8 +84,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'AlmaCar',
+        'USER': 'postgres',
+        'PASSWORD': 'Qwerty35',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
