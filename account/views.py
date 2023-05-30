@@ -11,16 +11,33 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import CreateAPIView
 
 from .models import User, Comment
-from .serializers import RegisterAuthorSerializer
+from .serializers import RegisterUserSerializer
 from .serializers import CommentSerializer
 
 
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
-    serializer_class = RegisterAuthorSerializer
-    # Что такое QuerySet? QuerySet, по сути, — список объектов
-    # заданной модели. QuerySet позволяет читать данные из
-    # базы данных, фильтровать и изменять их порядок.
+    serializer_class = RegisterUserSerializer
+    permission_classes = (permissions.AllowAny,)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            data = request.data
+            serializer = RegisterUserSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                response = {
+                    "message": "Регистрация прошла успешно!",
+                    "data": serializer.data
+                }
+                # PromoCode.objects.create(code=promo_code, user=serializer.data['id'])
+                return Response(data=response)
+            else:
+                data = serializer.errors
+                return Response({"message": "Что-то пошло не так!",
+                                 "data": data})
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
