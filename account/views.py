@@ -2,17 +2,23 @@ from django.db.migrations import serializer
 from django.http import HttpResponse
 from rest_framework import viewsets, status, permissions
 from rest_framework import viewsets, status, permissions, mixins, serializers
-from rest_framework.parsers import MultiPartParser
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import CreateAPIView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .models import User, Comment
 from .serializers import RegisterUserSerializer
-from .serializers import CommentSerializer
+
+from .serializers import CommentSerializer, MyTokenObtainPairSerializer
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+class MyTokenRefreshView(TokenRefreshView):
+    pass
 
 
 class RegisterView(CreateAPIView):

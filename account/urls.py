@@ -7,5 +7,8 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name="Register"),
     path('comments/', views.CommentViewSet.as_view({'post': 'list', 'get': 'destroy'}), name="Comments"),
     path('', include('rest_framework.urls')),
-    path('token/', obtain_auth_token),
+    path('obtain_token/', obtain_auth_token, name='token'),
+    path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', views.MyTokenRefreshView.as_view(), name='token_refresh'),
 ]
+
