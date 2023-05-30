@@ -44,4 +44,4 @@ class MoreInfoSerializer(serializers.ModelSerializer):
 # class RentalSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Rental
-#         fields = '__all__'
+#         fields = '__all__' n
