@@ -28,10 +28,10 @@ class RegisterUserSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data['password'] != data['password_2']:
             raise serializers.ValidationError('Пароли должны совпадать')
-        fire_base = '123456'
-        if data['sms_code'] != fire_base:
-            raise serializers.ValidationError('Cмс код не совпадает')
-        return data
+        # fire_base = '123456'
+        # if data['sms_code'] != fire_base:
+        #     raise serializers.ValidationError('Cмс код не совпадает')
+        # return data
 
     def create(self, validated_data):
         try:
