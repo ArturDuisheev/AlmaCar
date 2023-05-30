@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import User, Comment, PromoCode
+
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -63,7 +65,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_name(self, obj):
         return str(obj.user.username)
 
-
+      
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -71,3 +73,4 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['phone_number'] = user.phone_number
 
         return token
+

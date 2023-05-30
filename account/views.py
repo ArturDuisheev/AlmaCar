@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .models import User, Comment
 from .serializers import RegisterUserSerializer
+
 from .serializers import CommentSerializer, MyTokenObtainPairSerializer
 
 
