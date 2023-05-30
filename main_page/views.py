@@ -13,15 +13,21 @@ from .serializers import OurCarSerializer, DetailCarSerializer, AwardSerializer
 from .models import OurCar, DetailCar, Award
 
 
-class IsSuperuser(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.is_superuser
-
-
 class OurCarViewSet(viewsets.ModelViewSet):
     queryset = OurCar.objects.all()
     serializer_class = OurCarSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsSuperuser)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly | IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'PUT':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'DELETE':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'LIST':
+            self.permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+        return [permission() for permission in self.permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -72,8 +78,19 @@ class OurCarViewSet(viewsets.ModelViewSet):
 class DetailCarViewSet(viewsets.ModelViewSet):
     queryset = DetailCar.objects.all()
     serializer_class = DetailCarSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsSuperuser)
     parser_classes = (MultiPartParser,)
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly | IsAdminUser]
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'PUT':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'DELETE':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'LIST':
+            self.permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+        return [permission() for permission in self.permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -135,17 +152,18 @@ class DetailCarViewSet(viewsets.ModelViewSet):
 class AwardViewSet(viewsets.ModelViewSet):
     queryset = Award.objects.all()
     serializer_class = AwardSerializer
-    allowed_actions_for_admin = ['retrieve', 'update', 'destroy']
-    allowed_actions_for_user = ['list']
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly | IsAdminUser]
 
     def get_permissions(self):
-        if self.action in self.allowed_actions_for_admin:
-            permission_classes = [permissions.IsAdminUser]
-        elif self.action in self.allowed_actions_for_user:
-            permission_classes = [permissions.AllowAny]
-        else:
-            permission_classes = [permissions.IsAuthenticated]
-        return [permission() for permission in permission_classes]
+        if self.request.method == 'POST':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'PUT':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'DELETE':
+            self.permission_classes = [permissions.IsAdminUser]
+        elif self.request.method == 'LIST':
+            self.permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+        return [permission() for permission in self.permission_classes]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

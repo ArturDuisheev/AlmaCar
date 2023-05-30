@@ -4,7 +4,6 @@ from .models import User, Comment, PromoCode
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -22,7 +21,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = 'username phone_number inn password password_2 sms_code promo_code'.split()
+        fields = 'username phone_number inn password password_2 promo_code'.split()
 
     def validate(self, data):
         if data['password'] != data['password_2']:
@@ -30,7 +29,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
         # fire_base = '123456'
         # if data['sms_code'] != fire_base:
         #     raise serializers.ValidationError('Cмс код не совпадает')
-        # return data
+        return data
 
     def create(self, validated_data):
         try:
@@ -55,7 +54,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(f'Не удалось создать пользователя. {e}')
 
 
-
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
@@ -64,7 +62,7 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_name(self, obj):
         return str(obj.user.username)
 
-      
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -72,4 +70,3 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['phone_number'] = user.phone_number
 
         return token
-
