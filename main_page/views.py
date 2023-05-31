@@ -144,10 +144,6 @@ class DetailCarViewSet(viewsets.ModelViewSet):
             }
         return Response(response_404, status=status.HTTP_404_NOT_FOUND)
 
-    def perform_create(self, serializer):
-        photos = self.request.FILES.getlist('photos')[:7]  # Получаем список фотографий, ограниченный до 7
-        serializer.save(photos=photos)
-
 
 class AwardViewSet(viewsets.ModelViewSet):
     queryset = Award.objects.all()
@@ -200,7 +196,7 @@ class AwardViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
-        self.perform_destroy(instance)
+        instance.delete()
         response_data = {
             'message': 'Достижение успешно удалено'
         }
