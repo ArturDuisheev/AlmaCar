@@ -57,7 +57,7 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = 'photo user description'.split()
+        fields = 'id user description'.split()
 
     def get_name(self, obj):
         return str(obj.user.username)

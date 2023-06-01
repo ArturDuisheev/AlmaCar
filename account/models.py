@@ -40,7 +40,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Comment(models.Model):
-    photo = models.ImageField(upload_to='photos_in_comment/', verbose_name='Фото профиля')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     description = models.TextField(verbose_name='Отзыв')
 

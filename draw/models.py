@@ -60,9 +60,9 @@ class MoreInfo(models.Model):
 #     def __str__(self):
 #         return f"{self.user} - {self.start_date} - {self.end_date}"
 
-    class Meta:
-        verbose_name = "Последняя аренда"
-        verbose_name_plural = "последние аренды"
+    # class Meta:
+    #     verbose_name = "Последняя аренда"
+    #     verbose_name_plural = "последние аренды"
 
 # @receiver(pre_save, sender=Box)
 # def convert_prizes_to_array(sender, instance, **kwargs):
