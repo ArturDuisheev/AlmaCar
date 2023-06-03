@@ -14,6 +14,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     promotion = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False, verbose_name="Менеджер")
     is_superuser = models.BooleanField(default=False, verbose_name="Суперпользователь")
+    attempts = models.IntegerField(default=0, verbose_name="Количество попыток в розыгрыше")
 
     objects = CustomUserManager()
 

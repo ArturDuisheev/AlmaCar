@@ -1,8 +1,9 @@
 from django.contrib import admin
 
-from .models import Prize, Box, MoreInfo
+from .models import Game, OpenedBox, Winner, Prize
 
+admin.site.register(Game)
+admin.site.register(OpenedBox)
+admin.site.register(Winner)
 admin.site.register(Prize)
-admin.site.register(Box)
-# admin.site.register(Rental)
-admin.site.register(MoreInfo)
+

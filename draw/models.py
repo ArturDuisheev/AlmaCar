@@ -11,45 +11,57 @@ from django.db import models
 from multiselectfield import MultiSelectField
 
 
-class Box(models.Model):
-    rows = models.PositiveIntegerField(verbose_name="сколько рядов")
-    columns = models.PositiveIntegerField(verbose_name="сколько столбцов")
-    prizes = models.TextField(verbose_name="призы", max_length=100)
-
-    def __str__(self):
-        return f"{self.rows}x{self.columns}"
+class Game(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    box_count = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = "ячейка"
-        verbose_name_plural = "ячейки"
+        verbose_name = 'розыгрыш'
+        verbose_name_plural = 'розыгрыши'
+
+    def __str__(self):
+        return self.title
 
 
 class Prize(models.Model):
-    row = models.PositiveIntegerField(verbose_name="ряд")
-    column = models.PositiveIntegerField(verbose_name="столбец")
-    prize_item = models.CharField(max_length=100, verbose_name="приз")
-    box = models.ManyToManyField(Box, verbose_name="ячейка")
-
-    def __str__(self):
-        return f"{self.row}x{self.column}"
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='prizes')
+    index = models.IntegerField(verbose_name="Номер коробки")
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = "Приз"
-        verbose_name_plural = "Призы"
-
-
-class MoreInfo(models.Model):
-    name = models.CharField(max_length=100, verbose_name="название розыгрыша")
-    how_prize_true = models.TextField(max_length=100, verbose_name="В данном розыгрыше присутствуют такие призы как: ")
-    winners = models.ForeignKey(User, verbose_name="Победители", on_delete=models.CASCADE, null=True)
-    how_prize_win = models.ForeignKey(Prize, on_delete=models.CASCADE)
+        verbose_name = 'приз'
+        verbose_name_plural = 'призы'
+        unique_together = ('index', 'game')
 
     def __str__(self):
-        return self.name
+        return f"{self.title}-{str(self.game)}"
+
+
+class OpenedBox(models.Model):
+    index = models.IntegerField(verbose_name="Номер коробки")
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = "Подробнее про розыгрыш"
-        verbose_name_plural = "Подробнее про розыгрыши"
+        verbose_name = 'открытый бокс'
+        verbose_name_plural = 'открытые боксы'
+        unique_together = ('index', 'game')
+
+    def __str__(self):
+        return f"{self.index}-{str(self.game)}"
+
+
+class Winner(models.Model):
+    prize = models.ForeignKey(Prize, on_delete=models.CASCADE, verbose_name="приз")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="пользователь")
+
+    class Meta:
+        verbose_name = 'победитель'
+        verbose_name_plural = 'победители'
+
+    def __str__(self):
+        return f"{str(self.user.username)} выиграл (-а) {str(self.prize)}"
 
 
 # class Rental(models.Model):
@@ -60,9 +72,9 @@ class MoreInfo(models.Model):
 #     def __str__(self):
 #         return f"{self.user} - {self.start_date} - {self.end_date}"
 
-    # class Meta:
-    #     verbose_name = "Последняя аренда"
-    #     verbose_name_plural = "последние аренды"
+# class Meta:
+#     verbose_name = "Последняя аренда"
+#     verbose_name_plural = "последние аренды"
 
 # @receiver(pre_save, sender=Box)
 # def convert_prizes_to_array(sender, instance, **kwargs):
