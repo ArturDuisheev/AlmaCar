@@ -1,7 +1,5 @@
 from django.db import models
 
-from account.models import User
-
 
 class DetailCar(models.Model):
     name_car = models.CharField(max_length=100, verbose_name="Модель машины")
@@ -16,6 +14,15 @@ class DetailCar(models.Model):
     equipment = models.CharField(max_length=100, verbose_name="Комплектация")
     price = models.CharField(max_length=100, verbose_name="Цена машины")
     pledge = models.CharField(max_length=100, verbose_name="Залог")
+    hour = models.CharField(max_length=100, verbose_name="Время аренды", blank=True, null=True)
+    #bonus = models.ForeignKey(User, to_field='bonus', on_delete=models.CASCADE, verbose_name="Бонус машины", related_name='detail_car')
+    bonus = models.IntegerField(verbose_name="Бонус машины", blank=True, null=True, default=0, unique=True)
+    CHOICE_STATUS_OFFER = (
+        ('Завершен', 'Завершен'),
+        ('Отменен', 'Отменен'),
+        ('Ожидание', 'Ожидание'),
+    )
+    status = models.CharField(max_length=100, verbose_name="Статус", choices=CHOICE_STATUS_OFFER)
 
     def __str__(self):
         return self.name_car

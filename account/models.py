@@ -1,6 +1,8 @@
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
+
+from main_page.models import DetailCar
 from .managers import CustomUserManager
 
 import shortuuid
@@ -15,6 +17,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False, verbose_name="Менеджер")
     is_superuser = models.BooleanField(default=False, verbose_name="Суперпользователь")
     attempts = models.IntegerField(default=0, verbose_name="Количество попыток в розыгрыше")
+    bonus = models.ForeignKey(DetailCar, to_field='bonus', on_delete=models.CASCADE, null=True, blank=True)
 
     objects = CustomUserManager()
 

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from account.models import User
 from main_page.models import (
     DetailCar,
     Award,
@@ -17,13 +18,21 @@ class CarImageInnerSerializer(serializers.ModelSerializer):
 
 class DetailCarSerializer(serializers.ModelSerializer):
     images = CarImageInnerSerializer(many=True)
+    bonus = serializers.SerializerMethodField(method_name='get_bonus')
 
     class Meta:
         model = DetailCar
-        fields = ('id', 'image_car', 'image_brand', 'name_car', 'name_car_brand', 'color', 'year_car', 'engine_capacity', 'transmission',
-                  'equipment', 'price', 'pledge', 'images')
+        fields = (
+            'id', 'image_car', 'image_brand', 'name_car', 'name_car_brand', 'color', 'year_car', 'engine_capacity',
+            'transmission',
+            'equipment', 'price', 'pledge', 'images', 'hour', 'bonus', 'status'
+        )
 
-
+    def get_bonus(self, obj):
+        if obj.status == "Завершен":
+            return obj.bonus + 800
+        else:
+            return 0
 # class CommentSerializer(serializers.ModelSerializer):
 #     # user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 #     user = RegisterAuthorSerializer(
