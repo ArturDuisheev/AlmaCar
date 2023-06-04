@@ -83,16 +83,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'AlmaCar',
-        'USER': 'postgres',
-        'PASSWORD': 'Qwerty35',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+
 # import firebase_admin
 # from firebase_admin import credentials
 #
@@ -101,6 +92,13 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -116,7 +114,10 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'core.custom_authentication.AuthenticationWithoutPassword',
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
