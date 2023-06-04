@@ -64,9 +64,17 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['password'].required = False
+
+    def validate(self, attrs):
+        attrs.update({'password': ''})
+        return super(MyTokenObtainPairSerializer, self).validate(attrs)
+
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
         token['phone_number'] = user.phone_number
-
         return token
+

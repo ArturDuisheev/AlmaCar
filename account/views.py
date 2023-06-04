@@ -5,16 +5,27 @@ from rest_framework import viewsets, status, permissions, mixins, serializers
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenViewBase
+from django.contrib.auth import authenticate
 from .models import User, Comment
 from .serializers import RegisterUserSerializer
-
+from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import CommentSerializer, MyTokenObtainPairSerializer
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
+class MyTokenObtainPairView(TokenViewBase):
     serializer_class = MyTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        phone_number = request.data.get('phone_number')
+        user = authenticate(phone_number=phone_number)
+
+        if user is not None:
+            token = RefreshToken.for_user(user)
+            token['phone_number'] = user.phone_number
+            return Response({'token': str(token.access_token)})
+        else:
+            return Response({'error': 'Invalid credentials'}, status=401)
 
 
 class MyTokenRefreshView(TokenRefreshView):
