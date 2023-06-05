@@ -16,7 +16,7 @@ class DetailCar(models.Model):
     pledge = models.CharField(max_length=100, verbose_name="Залог")
     hour = models.CharField(max_length=100, verbose_name="Время аренды", blank=True, null=True)
     #bonus = models.ForeignKey(User, to_field='bonus', on_delete=models.CASCADE, verbose_name="Бонус машины", related_name='detail_car')
-    bonus = models.IntegerField(verbose_name="Бонус машины", blank=True, null=True, default=0, unique=True)
+    bonus = models.IntegerField(verbose_name="Бонус машины", blank=True, null=True)
     CHOICE_STATUS_OFFER = (
         ('Завершен', 'Завершен'),
         ('Отменен', 'Отменен'),
@@ -30,6 +30,9 @@ class DetailCar(models.Model):
     class Meta:
         verbose_name = "Наша машина, детальная информация о машине"
         verbose_name_plural = "Наша машина, детальная информация о машине"
+        constraints = [
+            models.UniqueConstraint(fields=['bonus'], name='unique_bonus'),
+        ]
 
 
 class CarImage(models.Model):

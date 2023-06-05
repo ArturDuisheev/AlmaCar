@@ -80,18 +80,12 @@ class CommentViewSet(viewsets.ModelViewSet):
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        try:
-            comment = Comment.objects.get()
-            comment.delete()
-            response_200 = {
-                "message": "Комментарий успешно удален",
-            }
-            return Response(response_200, status=status.HTTP_200_OK)
-        except Comment.DoesNotExist:
-            response_404 = {
-                "message": "Комментарий не найден",
-            }
-        return Response(response_404, status=status.HTTP_404_NOT_FOUND)
+        instance = self.get_object()
+        instance.delete()
+        responce = {
+            "message": "Комментарий успешно удален"
+        }
+        return Response(responce, status=status.HTTP_204_NO_CONTENT)
 
     def update(self, request, *args, **kwargs):
         try:

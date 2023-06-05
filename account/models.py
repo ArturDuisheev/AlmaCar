@@ -27,6 +27,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+        constraints = [
+            models.UniqueConstraint(fields=['username'], name='unique_username'),
+        ]
 
     def __str__(self):
         return self.phone_number
@@ -48,7 +51,7 @@ class Comment(models.Model):
     description = models.TextField(verbose_name='Отзыв')
 
     def __str__(self):
-        return self.user.fullname
+        return self.user.username
 
     class Meta:
         verbose_name = 'Отзыв'

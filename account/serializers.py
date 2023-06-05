@@ -55,13 +55,15 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Comment
         fields = 'id user description'.split()
 
-    def get_name(self, obj):
-        return str(obj.user.username)
-
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['user'] = instance.user.username
+        return data
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def __init__(self, *args, **kwargs):
@@ -77,4 +79,3 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['phone_number'] = user.phone_number
         return token
-

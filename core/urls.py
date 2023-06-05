@@ -11,4 +11,5 @@ urlpatterns = [
     path('condition/', include('condition.urls')),
     path('contact/', include('contact.urls')),
     path('draw/', include('draw.urls'))
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\
+  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
