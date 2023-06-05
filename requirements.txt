@@ -32,4 +32,4 @@ shortuuid
 djoser
 djangorestframework_simplejwt
 social-auth-app-django
-
+django-jazzmin==2.6.0
