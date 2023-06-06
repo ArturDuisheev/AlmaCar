@@ -17,7 +17,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False, verbose_name="Суперпользователь")
     attempts = models.IntegerField(default=0, verbose_name="Количество попыток в розыгрыше")
     bonus = models.ForeignKey(DetailCar, to_field='bonus', on_delete=models.CASCADE, null=True, blank=True, related_name="boneses")
-    history = models.ManyToManyField(RentCar, verbose_name='История аренды', related_name='user_history', blank=True, null=False)
+    history = models.ForeignKey(RentCar, verbose_name='История аренды', related_name='user_history', blank=True, null=True, on_delete=models.CASCADE)
 
     objects = CustomUserManager()
 

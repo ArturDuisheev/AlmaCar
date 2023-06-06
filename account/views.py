@@ -11,7 +11,7 @@ from .models import User, Comment, MyProfile, Bonus
 from .serializers import RegisterUserSerializer, ContactSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import CommentSerializer, MyTokenObtainPairSerializer, \
-    ProfileSerializer, BonusUserSerializer
+    ProfileSerializer, BonusUserSerializer, UserHistoryAutoSerializer
 
 
 class MyTokenObtainPairView(TokenViewBase):
@@ -125,3 +125,6 @@ class BonusUserView(viewsets.ModelViewSet):
     serializer_class = BonusUserSerializer
 
 
+class HistoryAutoView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserHistoryAutoSerializer

@@ -56,7 +56,6 @@ class RegisterUserSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Comment
         fields = 'id user description'.split()
@@ -65,6 +64,7 @@ class CommentSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         data['user'] = instance.user.username
         return data
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def __init__(self, *args, **kwargs):
@@ -88,6 +88,7 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
+            "id",
             "username",
             "phone_number",
             "inn",
@@ -116,3 +117,9 @@ class BonusUserSerializer(serializers.ModelSerializer):
             "bonus",
         )
 
+
+class UserHistoryAutoSerializer(serializers.ModelSerializer):
+    history = serializers.StringRelatedField()
+    class Meta:
+        model = User
+        fields = 'id history'.split()

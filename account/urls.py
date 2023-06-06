@@ -12,8 +12,12 @@ urlpatterns = [
     path('token/', views.MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', views.MyTokenRefreshView.as_view(), name='token_refresh'),
     path('contacts/', views.ContactView.as_view({"get": "list"}), name="contacts-list"),
-    path('profile/', views.MyProfileView.as_view({"get": "list"}, name="profile-get")),
+    path('contacts/<int:pk>/', views.ContactView.as_view({"get": "retrieve"}), name="contacts-list"),
+    path('profile/', views.MyProfileView.as_view({"get": "list"}, name="profile-list")),
+    path('profile/<int:pk>/', views.MyProfileView.as_view({"get": "retrieve"}, name="profile-get")),
     path('bonus/', views.BonusUserView.as_view({"get": "list"}, name="bonus-get")),
+    path('history/', views.HistoryAutoView.as_view({"get": "list"}, name="history-get")),
+    path('history/<int:pk>/', views.HistoryAutoView.as_view({"get": "retrieve"}, name="history-retrieve")),
 
 
 ]
