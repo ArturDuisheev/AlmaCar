@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenViewBase
 from django.contrib.auth import authenticate
-from .models import User, Comment
-from .serializers import RegisterUserSerializer
+from .models import User, Comment, MyProfile, Bonus
+from .serializers import RegisterUserSerializer, ContactSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import CommentSerializer, MyTokenObtainPairSerializer
+from .serializers import CommentSerializer, MyTokenObtainPairSerializer, \
+    ProfileSerializer, BonusUserSerializer
 
 
 class MyTokenObtainPairView(TokenViewBase):
@@ -107,3 +108,20 @@ class CommentViewSet(viewsets.ModelViewSet):
                 "message": "Комментарий не найден",
             }
             return Response(response_404, status=status.HTTP_404_NOT_FOUND)
+
+
+class ContactView(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = ContactSerializer
+
+
+class MyProfileView(viewsets.ModelViewSet):
+    queryset = MyProfile.objects.all()
+    serializer_class = ProfileSerializer
+
+
+class BonusUserView(viewsets.ModelViewSet):
+    queryset = Bonus.objects.all()
+    serializer_class = BonusUserSerializer
+
+

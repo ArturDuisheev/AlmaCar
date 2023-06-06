@@ -7,3 +7,12 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = '__all__'
+
+
+class AccountEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = (
+            "email",
+        )
+        read_only_fields = fields

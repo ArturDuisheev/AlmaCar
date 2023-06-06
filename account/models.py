@@ -2,9 +2,8 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
-from main_page.models import DetailCar
+from main_page.models import DetailCar, RentCar
 from .managers import CustomUserManager
-
 import shortuuid
 
 
@@ -17,7 +16,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False, verbose_name="Менеджер")
     is_superuser = models.BooleanField(default=False, verbose_name="Суперпользователь")
     attempts = models.IntegerField(default=0, verbose_name="Количество попыток в розыгрыше")
-    bonus = models.ForeignKey(DetailCar, to_field='bonus', on_delete=models.CASCADE, null=True, blank=True)
+    bonus = models.ForeignKey(DetailCar, to_field='bonus', on_delete=models.CASCADE, null=True, blank=True, related_name="boneses")
+    history = models.ManyToManyField(RentCar, verbose_name='История аренды', related_name='user_history', blank=True, null=False)
 
     objects = CustomUserManager()
 
@@ -69,3 +69,29 @@ class PromoCode(models.Model):
 
     def __str__(self):
         return self.code
+
+
+class MyProfile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="users_profile")
+    car = models.ForeignKey(DetailCar, on_delete=models.CASCADE, verbose_name="Арендованная машина", related_name="user_car_rent")
+
+    def __str__(self) -> str:
+        return str(self.user)
+
+    class Meta:
+        db_table = "profile"
+        verbose_name = "Профиль"
+        verbose_name_plural = "Профиль"
+
+
+class Bonus(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="users_bonus")
+    bonus = models.ForeignKey(DetailCar, on_delete=models.CASCADE, related_name="bonuses")
+
+    def __str__(self) -> str:
+        return str(self.user)
+
+    class Meta:
+        db_table = "bonus_user"
+        verbose_name = "Бонус"
+        verbose_name_plural = "Бонусы"

@@ -68,4 +68,3 @@ class ItemAdditionViewSet(viewsets.ModelViewSet):
             "message": "Услуга успешно удалена"
         }
         return Response(responce, status=status.HTTP_204_NO_CONTENT)
-

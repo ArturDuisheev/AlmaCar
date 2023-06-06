@@ -5,7 +5,8 @@ from main_page.models import (
     DetailCar,
     Award,
     CarImage,
-    AboutCompany
+    AboutCompany,
+    RentCar
 
 )
 
@@ -65,3 +66,21 @@ class AboutCompanySerializer(serializers.ModelSerializer):
             values = [value.strip() for value in video.split(',') if value.strip()]
             data['video'] = values
         return data
+
+
+class RentAutoSerializer(serializers.ModelSerializer):
+    rent_car = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
+    remaining_time = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = RentCar
+        fields = (
+            "rent_car",
+            "user",
+            "remaining_time",
+            "start_date",
+            "end_date",
+        )
+        read_only_fields = fields
+

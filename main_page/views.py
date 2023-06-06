@@ -9,8 +9,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .serializers import DetailCarSerializer, AwardSerializer, AboutCompanySerializer
-from .models import DetailCar, Award, AboutCompany
+from .serializers import DetailCarSerializer, AwardSerializer, AboutCompanySerializer, RentAutoSerializer
+from .models import DetailCar, Award, AboutCompany, RentCar
 
 
 class DetailCarViewSet(viewsets.ModelViewSet):
@@ -191,3 +191,9 @@ class AboutCompanyViewSet(viewsets.ModelViewSet):
             'message': 'О компании успешно удалено'
         }
         return Response(response_data, status=status.HTTP_200_OK)
+
+
+class RentAutoView(viewsets.ModelViewSet):
+    queryset = RentCar.objects.all()
+    serializer_class = RentAutoSerializer
+

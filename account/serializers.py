@@ -1,13 +1,14 @@
 from rest_framework import serializers
-from .models import User, Comment, PromoCode
+from .models import User, Comment, PromoCode, MyProfile, Bonus
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from contact.serializers import AccountEmailSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
 
@@ -79,3 +80,39 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
         token['phone_number'] = user.phone_number
         return token
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    contacts = AccountEmailSerializer(many=True)
+
+    class Meta:
+        model = User
+        fields = (
+            "username",
+            "phone_number",
+            "inn",
+            "contacts",
+        )
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+    car = serializers.StringRelatedField()
+
+    class Meta:
+        model = MyProfile
+        fields = (
+            "user",
+            "car",
+        )
+        read_only_fields = fields
+
+
+class BonusUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bonus
+        fields = (
+            "user",
+            "bonus",
+        )
+

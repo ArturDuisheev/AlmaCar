@@ -1,5 +1,7 @@
 from django.db import models
 
+from datetime import datetime
+
 
 class DetailCar(models.Model):
     name_car = models.CharField(max_length=100, verbose_name="Модель машины")
@@ -72,5 +74,25 @@ class AboutCompany(models.Model):
 
     def __str__(self):
         return "О нас"
+
+
+class RentCar(models.Model):
+    rent_car = models.ForeignKey(DetailCar, on_delete=models.CASCADE, verbose_name="Аренда машины", related_name="rent_car")
+    user = models.ForeignKey("account.User", on_delete=models.CASCADE, verbose_name="Арендатор", related_name="renter")
+    start_date = models.DateField(auto_now=False, blank=False, null=False, verbose_name=("Дата начала аренды"))
+    end_date = models.DateField(auto_now=False, blank=False, null=False, verbose_name=("Дата окончания аренды"))
+
+    def __str__(self) -> str:
+        return str(self.rent_car)
+
+    @property
+    def remaining_time(self):
+        remaining_hours = (self.end_date - datetime.now().date()).days * 24
+        return remaining_hours if remaining_hours > 0 else 0
+
+    class Meta:
+        db_table = "rent_car"
+        verbose_name = "Аренда машины"
+        verbose_name_plural = "Аренда машин"
 
 
