@@ -120,7 +120,7 @@ class AccountListAPIView(viewsets.generics.ListAPIView):
         return UserSerializer
 
     def get_permissions(self):
-        return [permissions.IsAuthenticatedOrReadOnly()]
+            return [permissions.IsAuthenticatedOrReadOnly()]
 
 
 class AccountDetailAPIView(viewsets.generics.RetrieveUpdateDestroyAPIView):

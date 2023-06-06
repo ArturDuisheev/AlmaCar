@@ -33,6 +33,6 @@ djoser
 djangorestframework_simplejwt
 social-auth-app-django
 django-jazzmin==2.6.0
-drf-yasg
+drf-yasg==1.21.5
 django-cors-headers
 gunicorn

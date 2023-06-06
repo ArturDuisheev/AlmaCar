@@ -11,6 +11,5 @@ urlpatterns = [
     path('condition/', include('condition.urls')),
     path('contact/', include('contact.urls')),
     path('draw/', include('draw.urls')),
-    path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\
   + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
