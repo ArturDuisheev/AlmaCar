@@ -1,37 +1,39 @@
 from rest_framework import serializers
 
-from .models import OurCar, DetailCar, Award
+from account.models import User
+from main_page.models import (
+    DetailCar,
+    Award,
+    CarImage,
+    AboutCompany,
+    RentCar
+
+)
 
 
-class OurCarSerializer(serializers.ModelSerializer):
+class CarImageInnerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OurCar
+        model = CarImage
         fields = '__all__'
 
 
 class DetailCarSerializer(serializers.ModelSerializer):
-    photos = serializers.ListField(child=serializers.FileField(), max_length=7, allow_empty=True, required=False)
+    images = CarImageInnerSerializer(many=True)
+    bonus = serializers.SerializerMethodField(method_name='get_bonus')
 
     class Meta:
         model = DetailCar
-        fields = '__all__'
+        fields = (
+            'id', 'image_car', 'image_brand', 'name_car', 'name_car_brand', 'color', 'year_car', 'engine_capacity',
+            'transmission',
+            'equipment', 'price', 'pledge', 'images', 'hour', 'bonus', 'status'
+        )
 
-    def create(self, validated_data):
-        photos_data = validated_data.pop('photos', [])
-        detail_car = DetailCar.objects.create(**validated_data)
-        for photo_data in photos_data:
-            DetailCar.objects.create(detail_car=detail_car, photo=photo_data)
-        return detail_car
-
-    def update(self, instance, validated_data):
-        photos_data = validated_data.pop('photos', [])
-        instance = super().update(instance, validated_data)
-        DetailCar.objects.filter(detail_car=instance).delete()
-        for photo_data in photos_data:
-            DetailCar.objects.create(detail_car=instance, photo=photo_data)
-        return instance
-
-
+    def get_bonus(self, obj):
+        if obj.status == "Завершен":
+            return obj.bonus + 800
+        else:
+            return 0
 # class CommentSerializer(serializers.ModelSerializer):
 #     # user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 #     user = RegisterAuthorSerializer(
@@ -50,3 +52,35 @@ class AwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Award
         fields = '__all__'
+
+
+class AboutCompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AboutCompany
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        video = data.get('video', '')
+        if isinstance(video, str):
+            values = [value.strip() for value in video.split(',') if value.strip()]
+            data['video'] = values
+        return data
+
+
+class RentAutoSerializer(serializers.ModelSerializer):
+    rent_car = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
+    remaining_time = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = RentCar
+        fields = (
+            "rent_car",
+            "user",
+            "remaining_time",
+            "start_date",
+            "end_date",
+        )
+        read_only_fields = fields
+

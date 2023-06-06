@@ -1,13 +1,10 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import BoxViewSet, PrizeViewSet, MoreInfoViewSet
-
+from .views import GameViewSet, OpenBoxAPIView
 router = routers.DefaultRouter()
-router.register(r'boxes', BoxViewSet)
-router.register(r'prizes', PrizeViewSet)
-router.register(r'moreinfo', MoreInfoViewSet)
-# router.register(r'rental', RentalViewSet)
+router.register(r'game', GameViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('open-box/', OpenBoxAPIView.as_view())
 ]

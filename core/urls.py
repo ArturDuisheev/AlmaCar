@@ -9,5 +9,7 @@ urlpatterns = [
     path('account/', include('account.urls')),
     path('ServiceAdditional/', include('additional_service.urls')),
     path('condition/', include('condition.urls')),
-    path('contact/', include('contact.urls'))
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('contact/', include('contact.urls')),
+    path('draw/', include('draw.urls'))
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\
+  + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

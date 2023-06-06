@@ -62,6 +62,9 @@ class ItemAdditionViewSet(viewsets.ModelViewSet):
         return Response(responce, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, *args, **kwargs):
-        instance = self.get_serializer(data=request.data).instance
+        instance = self.get_object()
         instance.delete()
-
+        responce = {
+            "message": "Услуга успешно удалена"
+        }
+        return Response(responce, status=status.HTTP_204_NO_CONTENT)

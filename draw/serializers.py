@@ -1,47 +1,48 @@
 from rest_framework import serializers
 
-from .models import Box, Prize, MoreInfo
+from draw.models import Game, OpenedBox, Prize, Winner
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class PrizeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prize
-        fields = ('id', 'row', 'column', 'prize_item', 'box')
+        fields = 'id title image index'.split()
 
 
-class BoxSerializer(serializers.ModelSerializer):
-    prizes = serializers.CharField()
+class GameSerializer(serializers.ModelSerializer):
+    prizes = PrizeSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Box
-        fields = ('id', 'rows', 'columns', 'prizes')
+        model = Game
+        fields = 'id title box_count prizes'.split()
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        prizes = data.get('prizes', '')
-        if isinstance(prizes, str):
-            values = [value.strip() for value in prizes.split(',') if value.strip()]
-            data['prizes'] = values
+        data['winners'] = [str(winner) for winner in Winner.objects.filter(prize__game=instance)]
+        data['opened_boxes'] = [box.get('index') for box in OpenedBox.objects.filter(game=instance).values('index')]
         return data
 
 
-class MoreInfoSerializer(serializers.ModelSerializer):
-    how_prize_true = serializers.SerializerMethodField()
-
+class OpenedBoxCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MoreInfo
-        fields = ('id', 'name', 'how_prize_true', 'winners', 'how_prize_win')
+        model = OpenedBox
+        fields = 'game index'.split()
 
-    def get_winners(self, instance):
-        winner_name = instance.winners.name if instance.winners else ""
-        prize = instance.how_prize_win.prize_item if instance.how_prize_win else ""
-        return f"{winner_name} выиграл(-а) {prize}"
-
-    def get_how_prize_true(self, obj):
-        return obj.how_prize_true
-
-
-# class RentalSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Rental
-#         fields = '__all__' n
+    def validate(self, attrs):
+        if isinstance(attrs['game'], int):
+            game = Game.objects.get(id=attrs['game'])
+        else:
+            game = attrs['game']
+        if game.box_count < attrs['index']:
+            raise serializers.ValidationError('Box index is out of range')
+        if self.context['request'].user.attempts == 0:
+            raise serializers.ValidationError('You have no attempts left')
+        user = self.context['request'].user
+        user.attempts -= 1
+        user.save()
+        if OpenedBox.objects.filter(game=game, index=attrs['index']).exists():
+            raise serializers.ValidationError('Box is already opened')
+        return attrs
